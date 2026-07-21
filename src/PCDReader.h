@@ -1,5 +1,6 @@
 // ======================================================================================
-// PCDReader - Lightweight PCD file reader (ASCII + binary, no PCL dependency)
+// PCDReader — 基于 PCL 的 PCD/LAS 读取器
+//   支持 .pcd (通过 PCL) 和 .las/.laz (通过内建解析器)
 // ======================================================================================
 
 #ifndef PCD_READER_H_
@@ -17,10 +18,11 @@ struct Point3D {
 
 struct PCDData {
     std::vector<Point3D> points;
-    Eigen::MatrixXf cloud;   // N×3 matrix
+    Eigen::MatrixXf cloud;   // N×3 matrix (for Patchwork/Patchwork++ algorithms)
 };
 
-/// Read ASCII or binary PCD file. Z+ = up (identity mapping).
+/// 读取点云文件（自动识别扩展名: .pcd → PCL, .las/.laz → 内建解析器）
+/// 返回 true 成功, false 失败
 bool read_pcd(const std::string& fname, PCDData& data);
 
 #endif

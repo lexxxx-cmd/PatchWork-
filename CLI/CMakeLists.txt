@@ -1,5 +1,5 @@
-# yaml-cpp: FetchContent 方式引入，无需系统预装
-find_package(yaml-cpp)
+find_package(yaml-cpp REQUIRED)
+find_package(PCL CONFIG REQUIRED COMPONENTS common io)
 
 add_executable(patchwork_cli main.cpp
     ${CMAKE_SOURCE_DIR}/src/PCDReader.cpp
@@ -17,7 +17,11 @@ target_link_libraries(patchwork_cli PRIVATE
     ground_seg_classic
     Eigen3::Eigen
     yaml-cpp
+    pcl_common pcl_io
 )
+if(MSVC)
+    target_compile_options(patchwork_cli PRIVATE /wd4068 /wd4267 /wd4244 /wd4018)
+endif()
 set_target_properties(patchwork_cli PROPERTIES
     RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin"
 )
